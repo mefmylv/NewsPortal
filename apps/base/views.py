@@ -32,7 +32,7 @@ def blog(request, id):
         new_comment.save()
 
         blog.comments.add(new_comment)
-        return redirect('/', id=id)
+        return redirect('#/', id=id)
 
     return render(request, "blog-post.html", locals())
 

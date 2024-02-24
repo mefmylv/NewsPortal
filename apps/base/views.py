@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 
 from django.contrib.auth import authenticate, login
 
-# Create your views here.
 
 def index(request):
     settings = Settings.objects.latest('id')
@@ -43,19 +42,15 @@ def register(request):
         password = request.POST['password']
         email = request.POST['email']
         try:
-            # Проверка пароля на соответствие требованиям
             validate_password(password)
         except ValidationError as e:
-            # Если пароль не соответствует требованиям, обработка ошибки
             return render(request, 'signup.html', {'error_message': e})
         
         if User.objects.filter(username=username).exists():
-            # Вывод сообщения о существующем пользователе
             return render(request, 'signup.html', {'username_exists': True})
         
-        # Создание нового пользователя
         user = User.objects.create_user(username=username, email=email, password=password)
-        # Логин пользователя сразу после регистрации
+     
         login(request, user)
         return redirect('/')  
     else:
@@ -65,11 +60,10 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        # Проверка имени пользователя и пароля
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')  # Перенаправление пользователя после успешного входа
+            return redirect('/')  
         else:
             return render(request, 'signin.html', {'error_message': 'Invalid username or password'})
     else:
